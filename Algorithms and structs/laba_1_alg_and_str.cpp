@@ -1,6 +1,3 @@
-﻿// laba_1_alg_and_str.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
 #include <iostream>
 #include <string>
 
