@@ -6,11 +6,11 @@ using namespace std;
 template<class T> struct Node
 {
 
-	T info;// Информационная часть.
-	Node<T>* left, * right;// Указатели на дочерние узлы.
-	// Конструктор по умолчанию.
+	T info;// РРЅС„РѕСЂРјР°С†РёРѕРЅРЅР°СЏ С‡Р°СЃС‚СЊ.
+	Node<T>* left, * right;// РЈРєР°Р·Р°С‚РµР»Рё РЅР° РґРѕС‡РµСЂРЅРёРµ СѓР·Р»С‹.
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.
 	Node() { left = right = nullptr; }
-	// Конструктор с параметрами.
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё.
 	Node(const T& d, Node<T>* l = nullptr, Node<T>* r = nullptr) :
 		info(d), left(l), right(r) {};
 };
@@ -18,120 +18,104 @@ template<class T> struct Node
 template<class T> class BinaryTree
 {
 protected:
-	Node<T>* root;	// Указатель на корень дерева. 
-	int count;		// Счётчик элементов
-	//Node<T>* copyTree(BinaryTree<T>* otherTree) const; // Метод, создающий копию дерева otherTree. 
+	Node<T>* root;	// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РєРѕСЂРµРЅСЊ РґРµСЂРµРІР°. 
+	int count;	// РЎС‡С‘С‚С‡РёРє СЌР»РµРјРµРЅС‚РѕРІ
 
-	Node<T>* searchLeef(Node<T>* tree, T& data) const;	// Ищет и возвращает лист с данными.
-	T* searchInfoLeef(Node<T>* tree, T& data) const;	// Ищет и возвращает данные. (хз зачем так)
-	Node<T>* retriveLeef(T& item) const					// Возвращает указатель на объект, если найден
+	Node<T>* searchLeef(Node<T>* tree, T& data) const;	// РС‰РµС‚ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ Р»РёСЃС‚ СЃ РґР°РЅРЅС‹РјРё.
+	T* searchInfoLeef(Node<T>* tree, T& data) const;	// РС‰РµС‚ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РґР°РЅРЅС‹Рµ. (С…Р· Р·Р°С‡РµРј С‚Р°Рє)
+	Node<T>* retriveLeef(T& item) const			// Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚, РµСЃР»Рё РЅР°Р№РґРµРЅ
 	{
 		return searchLeef(root, item);
 	}
 
-	void inorder(Node<T>* tree) const;			// Симметричный обход дерева 
-	int inorderCountLeefs(Node<T>* tree) const; // Симметричный обход дерева с подсчётом его детей
-	//void preorder(Node<T>* tree) const;		// Обход дерева в ширину
-	//void postorder(Node<T>* tree) const;		// Обход дерева в глубину
+	void inorder(Node<T>* tree) const;		// РЎРёРјРјРµС‚СЂРёС‡РЅС‹Р№ РѕР±С…РѕРґ РґРµСЂРµРІР° 
+	int inorderCountLeefs(Node<T>* tree) const; 	// РЎРёРјРјРµС‚СЂРёС‡РЅС‹Р№ РѕР±С…РѕРґ РґРµСЂРµРІР° СЃ РїРѕРґСЃС‡С‘С‚РѕРј РµРіРѕ РґРµС‚РµР№
+	//void preorder(Node<T>* tree) const;		// РћР±С…РѕРґ РґРµСЂРµРІР° РІ С€РёСЂРёРЅСѓ
+	//void postorder(Node<T>* tree) const;		// РћР±С…РѕРґ РґРµСЂРµРІР° РІ РіР»СѓР±РёРЅСѓ
 
-	void clear(Node<T>*& root);								// Удаляет все узлы дерева и устанавливает указатель root в NULL. 
-	void deleteLeefs(T& data);								// Поиск листа для удаления
-	void deleteNode(Node<T>*& tree, Node<T>*& root);		// Удаляет лист
-	Node<T>* GetPredecessor(Node<T>* tree, Node<T>*& root);	// Находит "предыдущий" по значению лист
-	Node<T>* GetSuccessor(Node<T>* tree);					// Находит родителя элемента
+	void clear(Node<T>*& root);					// РЈРґР°Р»СЏРµС‚ РІСЃРµ СѓР·Р»С‹ РґРµСЂРµРІР° Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ root РІ NULL. 
+	void deleteLeefs(T& data);					// РџРѕРёСЃРє Р»РёСЃС‚Р° РґР»СЏ СѓРґР°Р»РµРЅРёСЏ
+	void deleteNode(Node<T>*& tree, Node<T>*& root);		// РЈРґР°Р»СЏРµС‚ Р»РёСЃС‚
+	Node<T>* GetPredecessor(Node<T>* tree, Node<T>*& root);		// РќР°С…РѕРґРёС‚ "РїСЂРµРґС‹РґСѓС‰РёР№" РїРѕ Р·РЅР°С‡РµРЅРёСЋ Р»РёСЃС‚
+	Node<T>* GetSuccessor(Node<T>* tree);				// РќР°С…РѕРґРёС‚ СЂРѕРґРёС‚РµР»СЏ СЌР»РµРјРµРЅС‚Р°
 
-	void insert(Node<T>*& tree, T& data); // Добавляет лист
+	void insert(Node<T>*& tree, T& data); // Р”РѕР±Р°РІР»СЏРµС‚ Р»РёСЃС‚
 public:
-	BinaryTree() : root(nullptr), count(0) {}; // Конструктор по умолчанию.
-
-	//const BinaryTree<T>& operator=(const BinaryTree<T>& otherTree); // Перегрузка оператора присваивания.
-	//BinaryTree(const BinaryTree<T>& otherTree); // Копирующий конструктор
+	BinaryTree() : root(nullptr), count(0) {}; // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.
 
 	ostream& operator<<(T& d)
 	{
 		return (cout << d);
 	}
 
-	bool isEmpty() const // Отвечает на вопрос содержит дерево элементы или нет.
+	bool isEmpty() const // РћС‚РІРµС‡Р°РµС‚ РЅР° РІРѕРїСЂРѕСЃ СЃРѕРґРµСЂР¶РёС‚ РґРµСЂРµРІРѕ СЌР»РµРјРµРЅС‚С‹ РёР»Рё РЅРµС‚.
 	{
 		if (root == nullptr) return 1;
 		return 0;
 	}
 
-	void print() const // Выводит данные из дерева.
+	void print() const // Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РёР· РґРµСЂРµРІР°.
 	{
 		inorderTree();
 	}
 
-	int nodeCount() const // Возвращает количество узлов в дереве.
+	int nodeCount() const // Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СѓР·Р»РѕРІ РІ РґРµСЂРµРІРµ.
 	{
 		return count;
 	}
 
-	void destroy() // Удаляет все узлы дерева. В результате дерево пусто и root == NULL;
+	void destroy() // РЈРґР°Р»СЏРµС‚ РІСЃРµ СѓР·Р»С‹ РґРµСЂРµРІР°. Р’ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РґРµСЂРµРІРѕ РїСѓСЃС‚Рѕ Рё root == NULL;
 	{
 		clear(root);
 	}
 
-	void inorderTree() const // Симметричный обход дерева.
+	void inorderTree() const // РЎРёРјРјРµС‚СЂРёС‡РЅС‹Р№ РѕР±С…РѕРґ РґРµСЂРµРІР°.
 	{
 		inorder(root);
 	}
-	int CountLeefs(T& item) const // Симметричный обход дерева с подсчётом его детей.
+	int CountLeefs(T& item) const // РЎРёРјРјРµС‚СЂРёС‡РЅС‹Р№ РѕР±С…РѕРґ РґРµСЂРµРІР° СЃ РїРѕРґСЃС‡С‘С‚РѕРј РµРіРѕ РґРµС‚РµР№.
 	{
 		return inorderCountLeefs(retriveLeef(item));
 	}
 
-	//void preorderTree()const // Обход дерева в ширину.
+	//void preorderTree()const // РћР±С…РѕРґ РґРµСЂРµРІР° РІ С€РёСЂРёРЅСѓ.
 	//{
 	//	preorder(root);
 	//}
 
-	//void postorderTree()const // Обход дерева в глубину.
+	//void postorderTree()const // РћР±С…РѕРґ РґРµСЂРµРІР° РІ РіР»СѓР±РёРЅСѓ.
 	//{
 	//	postorder(root);
 	//}
 
-	T* retriveItem(T& item) const // Возвращает указатель на item, если найдено
+	T* retriveItem(T& item) const // Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° item, РµСЃР»Рё РЅР°Р№РґРµРЅРѕ
 	{
 		return searchInfoLeef(root, item);
 	}
 
-	void deleteItem(T& item) // Удаляет узел с данными item из дерева.
+	void deleteItem(T& item) // РЈРґР°Р»СЏРµС‚ СѓР·РµР» СЃ РґР°РЅРЅС‹РјРё item РёР· РґРµСЂРµРІР°.
 	{
 		deleteLeefs(root, item);
 	}
 
-	void insertItem(T& item) // Добавляет узел с данными item в дерево.
+	void insertItem(T& item) // Р”РѕР±Р°РІР»СЏРµС‚ СѓР·РµР» СЃ РґР°РЅРЅС‹РјРё item РІ РґРµСЂРµРІРѕ.
 	{
 		insert(root, item);
 	}
 
-	~BinaryTree() // Деструктор
+	~BinaryTree() // Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
 	{
 		destroy();
 	}
 };
-
-//template<class T> Node<T>* BinaryTree<T>::copyTree(BinaryTree<T>* otherTree) const
-//{
-//	if (otherTree->isEmpty()) return nullptr;
-//
-//	Node<T> ourTree = *this;
-//	ourTree.insertItem(otherTree->root->info);
-//	copyTree(otherTree->root->left);
-//	copyTree(otherTree->root->right);
-//	return ourTree;
-//}
-
 template<class T> void BinaryTree<T>::inorder(Node<T>* tree) const
 {
 	if (tree != NULL)
 	{
-		inorder(tree->left); //Рекурсивный вызов
+		inorder(tree->left); //Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹Р·РѕРІ
 		cout << tree->info << " ";
-		//Или добавление в очередь или стэк...
-		inorder(tree->right); //Рекурсивный вызов
+		//РР»Рё РґРѕР±Р°РІР»РµРЅРёРµ РІ РѕС‡РµСЂРµРґСЊ РёР»Рё СЃС‚СЌРє...
+		inorder(tree->right); //Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹Р·РѕРІ
 	}
 }
 template<class T> int BinaryTree<T>::inorderCountLeefs(Node<T>* tree) const
@@ -140,8 +124,8 @@ template<class T> int BinaryTree<T>::inorderCountLeefs(Node<T>* tree) const
 	if (tree != NULL)
 	{
 		++cnt;
-		cnt += inorderCountLeefs(tree->left);	//Рекурсивный вызов
-		cnt += inorderCountLeefs(tree->right);	//Рекурсивный вызов
+		cnt += inorderCountLeefs(tree->left);	//Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹Р·РѕРІ
+		cnt += inorderCountLeefs(tree->right);	//Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹Р·РѕРІ
 		return cnt;
 	}
 	else return 0;
@@ -149,119 +133,119 @@ template<class T> int BinaryTree<T>::inorderCountLeefs(Node<T>* tree) const
 
 template<class T> void BinaryTree<T>::clear(Node<T>*& root)
 {
-	while (!isEmpty()) // Пока дерево не пусто
-		deleteNode(root, root); // Удаляем элементы
+	while (!isEmpty()) // РџРѕРєР° РґРµСЂРµРІРѕ РЅРµ РїСѓСЃС‚Рѕ
+		deleteNode(root, root); // РЈРґР°Р»СЏРµРј СЌР»РµРјРµРЅС‚С‹
 }
 
 template<class T> Node<T>* BinaryTree<T>::searchLeef(Node<T>* tree, T& data) const
 {
-	if (data < tree->info)				// Если данные «меньше», чем у текущего узла ...
-		searchLeef(tree->left, data);	// Идём налево
-	else if (data > tree->info)			// Если данные «больше», чем у текущего узла ...
-		searchLeef(tree->right, data);	// Идём направо
-	else if (data == tree->info) return tree; // Возвращаем указатель на объект
+	if (data < tree->info)				// Р•СЃР»Рё РґР°РЅРЅС‹Рµ В«РјРµРЅСЊС€РµВ», С‡РµРј Сѓ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° ...
+		searchLeef(tree->left, data);	// РРґС‘Рј РЅР°Р»РµРІРѕ
+	else if (data > tree->info)			// Р•СЃР»Рё РґР°РЅРЅС‹Рµ В«Р±РѕР»СЊС€РµВ», С‡РµРј Сѓ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° ...
+		searchLeef(tree->right, data);	// РРґС‘Рј РЅР°РїСЂР°РІРѕ
+	else if (data == tree->info) return tree; 	// Р’РѕР·РІСЂР°С‰Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚
 }
 template<class T> T* BinaryTree<T>::searchInfoLeef(Node<T>* tree, T& data) const
 {
-	if (data < tree->info)				// Если данные «меньше», чем у текущеыго узла ...
-		searchLeef(tree->left, data);	// Идём налево
-	else if (data > tree->info)			// Если данные «больше», чем у текущего узла ...
-		searchLeef(tree->right, data);	// Идём направо
-	else if (data == tree->info) return new T(tree->info); // Возвращаем указатель на данные
-	// Не спрашивайте меня, зачем так делать, я сам не очень понимаю, скажите, если сами знаете
+	if (data < tree->info)				// Р•СЃР»Рё РґР°РЅРЅС‹Рµ В«РјРµРЅСЊС€РµВ», С‡РµРј Сѓ С‚РµРєСѓС‰РµС‹РіРѕ СѓР·Р»Р° ...
+		searchLeef(tree->left, data);	// РРґС‘Рј РЅР°Р»РµРІРѕ
+	else if (data > tree->info)			// Р•СЃР»Рё РґР°РЅРЅС‹Рµ В«Р±РѕР»СЊС€РµВ», С‡РµРј Сѓ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° ...
+		searchLeef(tree->right, data);	// РРґС‘Рј РЅР°РїСЂР°РІРѕ
+	else if (data == tree->info) return new T(tree->info); // Р’РѕР·РІСЂР°С‰Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РґР°РЅРЅС‹Рµ
+	// РќРµ СЃРїСЂР°С€РёРІР°Р№С‚Рµ РјРµРЅСЏ, Р·Р°С‡РµРј РІРѕР·РІСЂР°С‰Р°С‚СЊ СЃСЃС‹Р»РєСѓ (РёР»Рё С‡С‚Рѕ СЌС‚Рѕ), СЏ СЃР°Рј РЅРµ РѕС‡РµРЅСЊ РїРѕРЅРёРјР°СЋ, СЃРєР°Р¶РёС‚Рµ, РµСЃР»Рё СЃР°РјРё Р·РЅР°РµС‚Рµ
 }
 
 template<class T> void BinaryTree<T>::deleteLeefs(T& data)
 {
-	deleteNode(retriveLeef(data), root); // Удаляем объект, найденный по данным
+	deleteNode(retriveLeef(data), root); // РЈРґР°Р»СЏРµРј РѕР±СЉРµРєС‚, РЅР°Р№РґРµРЅРЅС‹Р№ РїРѕ РґР°РЅРЅС‹Рј
 }
 
 template<class T> void BinaryTree<T>::deleteNode(Node<T>*& tree, Node<T>*& root)
 {
 	Node<T>* temp; Node<T>* temproot;
 
-	// Это пиздец, я просто промолчу (потратил свыше 5 часов на эту хуйню)
+	// Р­С‚Рѕ РїРёР·РґРµС†, СЏ РїСЂРѕСЃС‚Рѕ РїСЂРѕРјРѕР»С‡Сѓ (РїРѕС‚СЂР°С‚РёР» СЃРІС‹С€Рµ 5 С‡Р°СЃРѕРІ РЅР° СЌС‚Сѓ С…СѓР№РЅСЋ)
 
 	temp = tree, temproot = root;
-	if (tree->left == nullptr && tree->right != nullptr)		// Один ребёнок
+	if (tree->left == nullptr && tree->right != nullptr)		// РћРґРёРЅ СЂРµР±С‘РЅРѕРє
 	{
-		temp = tree->right;										// Спускаемся вправо
+		temp = tree->right;						// РЎРїСѓСЃРєР°РµРјСЃСЏ РІРїСЂР°РІРѕ
 		tree->info = temp->info,								
-			tree->left = temp->left, tree->right = temp->right;	// Копируем (отбираем) там данные и детей
-		delete temp, --count;									// Удаляем, вычитаем
-		if (count == 0) tree = nullptr;							// Если 0, обнуляем указатель
+			tree->left = temp->left, tree->right = temp->right;	// РљРѕРїРёСЂСѓРµРј (РѕС‚Р±РёСЂР°РµРј) С‚Р°Рј РґР°РЅРЅС‹Рµ Рё РґРµС‚РµР№
+		delete temp, --count;						// РЈРґР°Р»СЏРµРј, РІС‹С‡РёС‚Р°РµРј
+		if (count == 0) tree = nullptr;					// Р•СЃР»Рё 0, РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ
 	}
-	else if (tree->right == nullptr && tree->left != nullptr)	// Один ребёнок
+	else if (tree->right == nullptr && tree->left != nullptr)	// РћРґРёРЅ СЂРµР±С‘РЅРѕРє
 	{
-		temp = tree->left;										// Спускаемся влево
+		temp = tree->left;						// РЎРїСѓСЃРєР°РµРјСЃСЏ РІР»РµРІРѕ
 		tree->info = temp->info, 
-			tree->right = temp->right, tree->left = temp->left;	// Копируем (отбираем) там данные и детей
-		delete temp, --count;									// Удаляем, вычитаем
-		if (count == 0) tree = nullptr;							// Если 0, обнуляем указатель
+			tree->right = temp->right, tree->left = temp->left;	// РљРѕРїРёСЂСѓРµРј (РѕС‚Р±РёСЂР°РµРј) С‚Р°Рј РґР°РЅРЅС‹Рµ Рё РґРµС‚РµР№
+		delete temp, --count;						// РЈРґР°Р»СЏРµРј, РІС‹С‡РёС‚Р°РµРј
+		if (count == 0) tree = nullptr;					// Р•СЃР»Рё 0, РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ
 
 	}
-	else if (tree->right == nullptr && tree->left == nullptr)	// Если бездетный
+	else if (tree->right == nullptr && tree->left == nullptr)	// Р•СЃР»Рё Р±РµР·РґРµС‚РЅС‹Р№
 	{
-		temproot = GetSuccessor(temp);			// Находим предка	
-		if (temproot->right == temp) temproot->right = nullptr;	// Ну и обнуляем у предка 
-		else temproot->left = nullptr;							// указатель на ребёнка
-		delete temp, --count;									// Удаляем, вычитаем
-		if (count == 0) tree = nullptr;							// Если 0, обнуляем указатель
+		temproot = GetSuccessor(temp);				// РќР°С…РѕРґРёРј РїСЂРµРґРєР°	
+		if (temproot->right == temp) temproot->right = nullptr;	// РќСѓ Рё РѕР±РЅСѓР»СЏРµРј Сѓ РїСЂРµРґРєР° 
+		else temproot->left = nullptr;				// СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРµР±С‘РЅРєР°
+		delete temp, --count;					// РЈРґР°Р»СЏРµРј, РІС‹С‡РёС‚Р°РµРј
+		if (count == 0) tree = nullptr;				// Р•СЃР»Рё 0, РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ
 	}
-	else														// Ровно два дочерних узла
+	else								// Р РѕРІРЅРѕ РґРІР° РґРѕС‡РµСЂРЅРёС… СѓР·Р»Р°
 	{
-		Node<T>* pred = GetPredecessor(tree, temproot);	// Находит «предыдущий» элемент
-		int leefs = inorderCountLeefs(pred);						// Смотрим, сколько "листьев"
-		tree->info = pred->info;						// Записывает данные в «удаляемый» узел
-		if (leefs == 1)												// Если элемент бездетный, сразу удаляем, я так захотел, а то ебал я в рот >:(	
+		Node<T>* pred = GetPredecessor(tree, temproot);		// РќР°С…РѕРґРёС‚ В«РїСЂРµРґС‹РґСѓС‰РёР№В» СЌР»РµРјРµРЅС‚
+		int leefs = inorderCountLeefs(pred);				// РЎРјРѕС‚СЂРёРј, СЃРєРѕР»СЊРєРѕ "Р»РёСЃС‚СЊРµРІ"
+		tree->info = pred->info;				// Р—Р°РїРёСЃС‹РІР°РµС‚ РґР°РЅРЅС‹Рµ РІ В«СѓРґР°Р»СЏРµРјС‹Р№В» СѓР·РµР»
+		if (leefs == 1)							// Р•СЃР»Рё СЌР»РµРјРµРЅС‚ Р±РµР·РґРµС‚РЅС‹Р№, СЃСЂР°Р·Сѓ СѓРґР°Р»СЏРµРј, СЏ С‚Р°Рє Р·Р°С…РѕС‚РµР», Р° С‚Рѕ РµР±Р°Р» СЏ РІ СЂРѕС‚ >:(	
 		{
-			if (temproot->right == pred) temproot->right = nullptr;	// Ну и обнуляем у предка..
-			else temproot->left = nullptr;							// ..указатель на ребёнка
-			delete pred, --count;									// Удаляем, вычитаем
-			if (count == 0) tree = nullptr;							// Если 0, обнуляем указатель
+			if (temproot->right == pred) temproot->right = nullptr;	// РќСѓ Рё РѕР±РЅСѓР»СЏРµРј Сѓ РїСЂРµРґРєР°..
+			else temproot->left = nullptr;				// ..СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРµР±С‘РЅРєР°
+			delete pred, --count;					// РЈРґР°Р»СЏРµРј, РІС‹С‡РёС‚Р°РµРј
+			if (count == 0) tree = nullptr;				// Р•СЃР»Рё 0, РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ
 		}
-		else deleteNode(pred, temproot);				//Удаляет «предыдущий» элемент
+		else deleteNode(pred, temproot);			//РЈРґР°Р»СЏРµС‚ В«РїСЂРµРґС‹РґСѓС‰РёР№В» СЌР»РµРјРµРЅС‚
 	}
 
 }
 
 template<class T> Node<T>* BinaryTree<T>::GetPredecessor(Node<T>* tree, Node<T>*& root)
 {
-	Node<T>* curr = tree->left;		// Спускаемся влево (можно вправо сделать, но тогда и while тоже так)
-	while (curr->right != nullptr)	// Идём направо, пока есть узлы...
+	Node<T>* curr = tree->left;	// РЎРїСѓСЃРєР°РµРјСЃСЏ РІР»РµРІРѕ (РјРѕР¶РЅРѕ РІРїСЂР°РІРѕ СЃРґРµР»Р°С‚СЊ, РЅРѕ С‚РѕРіРґР° Рё while С‚РѕР¶Рµ С‚Р°Рє)
+	while (curr->right != nullptr)	// РРґС‘Рј РЅР°РїСЂР°РІРѕ, РїРѕРєР° РµСЃС‚СЊ СѓР·Р»С‹...
 	{
 		root = curr;
 		curr = curr->right;
 	}
-	return curr; //Получаем указатель
+	return curr; //РџРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ
 }
 template<class T> Node<T>* BinaryTree<T>::GetSuccessor(Node<T>* tree)
 {
-	// Идентично GetPredecessor в купе с searchLeef, только возвращаем предка, при находке элемента
+	// РРґРµРЅС‚РёС‡РЅРѕ GetPredecessor РІ РєСѓРїРµ СЃ searchLeef, С‚РѕР»СЊРєРѕ РІРѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґРєР°, РїСЂРё РЅР°С…РѕРґРєРµ СЌР»РµРјРµРЅС‚Р°
 
-	Node<T>* curr = root;	// Начинаем с корня
-	Node<T>* currRoot;		// Спускаемся влево (можно вправо сделать, но тогда и while тоже так)
-	while (curr != tree)	// Идём направо, пока есть узлы...
+	Node<T>* curr = root;	// РќР°С‡РёРЅР°РµРј СЃ РєРѕСЂРЅСЏ
+	Node<T>* currRoot;	// РЎРїСѓСЃРєР°РµРјСЃСЏ РІР»РµРІРѕ (РјРѕР¶РЅРѕ РІРїСЂР°РІРѕ СЃРґРµР»Р°С‚СЊ, РЅРѕ С‚РѕРіРґР° Рё while С‚РѕР¶Рµ С‚Р°Рє)
+	while (curr != tree)	// РРґС‘Рј РЅР°РїСЂР°РІРѕ, РїРѕРєР° РµСЃС‚СЊ СѓР·Р»С‹...
 	{
 		currRoot = curr;
-		if (curr->info < tree->info)				// Если данные «меньше», чем у текущего узла ...
-			curr = tree->left;	// Идём налево
-		else if (curr->info > tree->info)			// Если данные «больше», чем у текущего узла ...
-			curr = tree->right;	// Идём направо
-		else if (curr->info == tree->info) return currRoot; // Возвращаем указатель на объект
+		if (curr->info < tree->info)				// Р•СЃР»Рё РґР°РЅРЅС‹Рµ В«РјРµРЅСЊС€РµВ», С‡РµРј Сѓ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° ...
+			curr = tree->left;	// РРґС‘Рј РЅР°Р»РµРІРѕ
+		else if (curr->info > tree->info)			// Р•СЃР»Рё РґР°РЅРЅС‹Рµ В«Р±РѕР»СЊС€РµВ», С‡РµРј Сѓ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° ...
+			curr = tree->right;	// РРґС‘Рј РЅР°РїСЂР°РІРѕ
+		else if (curr->info == tree->info) return currRoot; 	// Р’РѕР·РІСЂР°С‰Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚
 	}
-	return curr; //Получаем указатель
+	return curr; //РџРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ
 }
 
 template<class T> void BinaryTree<T>::insert(Node<T>*& tree, T& data)
 {
 	{
-		if (tree == nullptr) // Основной случай
+		if (tree == nullptr) 			// РћСЃРЅРѕРІРЅРѕР№ СЃР»СѓС‡Р°Р№
 			tree = new Node<T>(data, nullptr, nullptr), ++count;
 		else if (data < tree->info)
-			insert(tree->left, data);	// Рекурсия
+			insert(tree->left, data);	// Р РµРєСѓСЂСЃРёСЏ
 		else
-			insert(tree->right, data);	// Рекурсия
+			insert(tree->right, data);	// Р РµРєСѓСЂСЃРёСЏ
 	}
 }
 
@@ -270,17 +254,17 @@ template<class T> void BinaryTree<T>::insert(Node<T>*& tree, T& data)
 
 
 
-
+// Р—Р°РґР°С‚РѕРє РєР°Р»СЊРєСѓР»СЏС‚РѕСЂР°
 template<class T>
-class TreeCalс : public BinaryTree<T>
+class TreeCalСЃ : public BinaryTree<T>
 {
 	using BinaryTree<T>::root;
 
 protected:
 	int num;
 public:
-	TreeCalс() : num(NULL) {};
-	~TreeCalс();
+	TreeCalСЃ() : num(NULL) {};
+	~TreeCalСЃ();
 
 
 
