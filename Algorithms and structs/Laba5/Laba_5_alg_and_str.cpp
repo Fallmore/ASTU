@@ -38,13 +38,13 @@ void Check(int& choice, int NumberOfChoice)
 //		16				48				80				112
 //	8		24		40		56		72		88		104		120
 //4	  10  20  28  36  44  52  60  68  76 82	  92 100  108 116 124
-//																														64
-//													32													Ты хочешь что-нибудь сделать?											96
-//					16					У тебя есть долги/домашка?						48																	80			Ты хочешь отдохнуть?						112
-//			Делай долги/домашку						40						У тебя есть дела по дому?				56									Отдыхай			104						Ты хочешь что-то сделать, но без усилий?		120
-//												Делай дела					52							У тебя хоть есть силы на дела?				60			Попроси помощи у Славы										116				Ты пиццу хочешь?				124
-//									50					У тебя сейчас есть много свободного времени?			54						58	И долго это у тебя?		62												Иди закажи/поешь					122			А просто есть хочешь?					126
-//					Помоги кому-нибудь или саморазвивайся											Посмотри полезное видео		Обратись за помощью				Отдохни																	Иди поешь что-нибудь и вернись				Тогда просто подкрепись, а затем возвращайся сюда
+//																										64
+//											32													Ты хочешь что-нибудь сделать?										96
+//				16					У тебя есть долги/домашка?						48															80			Ты хочешь отдохнуть?						112
+//			Делай долги/домашку						40						У тебя есть дела по дому?				56									Отдыхай						104			Ты хочешь что-то сделать, но без усилий?		120
+//											Делай дела				52							У тебя хоть есть силы на дела?			60									Попроси помощи у Славы				116				Ты пиццу хочешь?				124
+//								50					У тебя сейчас есть много свободного времени?			54						58	И долго это у тебя?	62												Иди закажи/поешь					122			А просто есть хочешь?			126
+//							Помоги кому-нибудь или саморазвивайся									Посмотри полезное видео				Обратись за помощью			Отдохни																	Иди поешь что-нибудь и вернись				Тогда просто подкрепись, а затем возвращайся сюда
 
 struct Desire
 {
@@ -149,7 +149,7 @@ void DesireTree()
 		desireTree.insertItem(des);
 	}
 
-	/*do
+	do
 	{
 		ch = 0;
 		Will(desireTree);
@@ -166,7 +166,7 @@ void DesireTree()
 		if (ch == 1) system("cls");
 	} while (ch != 2);
 
-	cout << endl;*/
+	cout << endl;
 }
 
 int main()
@@ -178,48 +178,3 @@ int main()
 	DesireTree();
 	return 0;
 }
-
-//temp = tree, temproot = root;
-//if (tree->left == nullptr && tree->right != nullptr)	// Один ребёнок
-//{
-//	temp = tree->right;
-//	tree->info = temp->info, tree->left = temp->left;
-//	temp->right == nullptr
-//		? tree->right = nullptr
-//		: tree->right = temp->right;
-//	delete temp, --count;
-//	if (count == 0) tree = nullptr;
-//}
-//else if (tree->right == nullptr && tree->left != nullptr) // Один ребёнок
-//{
-//	temp = tree->left;
-//	tree->info = temp->info, tree->right = temp->right;
-//	temp->left == nullptr
-//		? tree->left = nullptr
-//		: tree->left = temp->left;
-//	delete temp, --count;
-//	if (count == 0) tree = nullptr;
-//
-//}
-//else if (tree->right == nullptr && tree->left == nullptr)
-//{
-//	temproot = GetSuccessor(temp, (*this).root);
-//	if (temproot->right == temp) temproot->right = nullptr;
-//	else temproot->left = nullptr;
-//	delete temp, --count;
-//	if (count == 0) tree = nullptr;
-//}
-//else // Ровно два дочерних узла
-//{
-//	Node<T>* pred = GetPredecessor(tree, temproot);	// Находит «предыдущий» элемент
-//	int leefs = inorderCountLeefs(pred);
-//	tree->info = pred->info;					// Записывает данные в «удаляемый» узел
-//	if (leefs == 1)
-//	{
-//		if (temproot->right == pred) temproot->right = nullptr;
-//		else temproot->left = nullptr;
-//		delete pred, --count;
-//		if (count == 0) tree = nullptr;
-//	}
-//	else deleteNode(pred, temproot);						//Удаляет «предыдущий» элемент
-//}
