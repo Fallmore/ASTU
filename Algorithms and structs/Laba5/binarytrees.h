@@ -164,7 +164,7 @@ template<class T> void BinaryTree<T>::deleteNode(Node<T>*& tree, Node<T>*& root)
 {
 	Node<T>* temp; Node<T>* temproot;
 
-	// Это пиздец, я просто промолчу (потратил свыше 5 часов на эту хуйню)
+	// Это пиздец, я просто промолчу (потратил свыше 15 часов на эту хуйню)
 
 	temp = tree, temproot = root;
 	if (tree->left == nullptr && tree->right != nullptr)		// Один ребёнок
