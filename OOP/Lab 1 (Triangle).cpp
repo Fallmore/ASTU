@@ -13,7 +13,6 @@ using namespace std;
 
 float Check() {
     float data;
-
     while ((!(cin >> data)))
         cin.clear(), cin.ignore();
     return data;
