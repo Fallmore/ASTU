@@ -20,7 +20,7 @@ float Check() {
 }
 
 class Triangle {
-private:
+  private:
     float side1, side2, side3;
 
     // Виды треугольника
@@ -36,87 +36,86 @@ private:
     };
     Forms sideType, angleType;
 
-    // Проверка на существование
-    bool Exist(const float a, const float b, const float c) {
-        if (a + b <= c || a + c <= b || b + c <= a || a == 0 || b == 0 || c == 0)
-            return 0;
-        return 1;
-    }
-    bool Exist() {
-        float a, b, c;
-        Getter(a, b, c);
-        return (Exist(a, b, c));
+    void SetForms() {
+        sideType = FormSides();
+        angleType = FormAngles();
     }
 
-public:
+    //Проверка на неправильные данные
+    bool WrongData(const float a)   {
+        return a < 1;
+    }
+
+    // Проверка на существование
+    bool Exist(const float a, const float b, const float c) {
+        if (a + b <= c || a + c <= b || b + c <= a || WrongData(a) || WrongData(b) || WrongData(c))
+            return false;
+        return true;
+    }
+    bool Exist() {
+        return (Exist(side1, side2, side3));
+    }
+
+  public:
     Triangle() : side1(0), side2(0), side3(0), sideType(None), angleType(None) {};
     Triangle(const float a, const float b, const float c) : side1(a), side2(b), side3(c), sideType(FormSides()), angleType(FormAngles()) {
         if (!Exist(a, b, c)) side1 = 6, side2 = 6, side3 = 6, sideType = None, angleType = None;
     };
     Triangle(const float a) : side1(a), side2(a), side3(a), sideType(FormSides()), angleType(FormAngles()) {};
-    Triangle(Triangle& tr) : side1(tr.side1), side2(tr.side2), side3(tr.side3), sideType(tr.FormSides()), angleType(tr.FormAngles()) {};
 
     void Read();	// Ввод с клавиатуры
-
     void Display();	// Вывод на экран
-
     // Возвращает строку данных полей
-    string toString() {
+    string toString() noexcept {
         return to_string(side1) + " " + to_string(side2) + " " + to_string(side3);
     }
-
     // Изменение полей класса
-    void Setter(float a, float b, float c) {
-            side1 = a, side2 = b, side3 = c,
-            sideType = FormSides(), angleType = FormAngles();
-
-
+    void SetSide1(float a) {
+        side1 = a;
+        SetForms();
     }
-    void Setter(float a) {
-        side1 = a, side2 = a, side3 = a;
-        sideType = FormSides();
-        angleType = FormAngles();
+    void SetSide2(float a) {
+        side2 = a;
+        SetForms();
     }
-    void Setter(Triangle tr) {
-        this->side1 = tr.side1, this->side2 = tr.side2, this->side3 = tr.side3,
-            sideType = tr.FormSides(), angleType = tr.FormAngles();
+    void SetSide3(float a) {
+        side3 = a;
+        SetForms();
     }
-
-    // Получение полей в переменные
-    void Getter(float& a, float& b, float& c) {
-        a = side1, b = side2, c = side3;
+    void SetTriangle(Triangle tr) noexcept {
+        *this = tr;
     }
-    // Получение полей в объект
-    void Getter(Triangle tr) {
-        Setter(tr);
+    // Получение полей
+    float GetSide1() noexcept {
+        return side1;
     }
-
+    float GetSide2() noexcept {
+        return side2;
+    }
+    float GetSide3() noexcept {
+        return side3;
+    }
     // Вычисление периметра
     float Perimetr() {
         return side1 + side2 + side3;
     }
-
     // Вычисление площади
     float Square() {
         float p = Perimetr() / 2;
         return sqrt(p * (p - side1) * (p - side2) * (p - side3));
     }
-
     // Определение вида сторон треугольника
     Forms FormSides() {
-        float a, b, c;
-        Getter(a, b, c);
-
-        if (a == b && b == c) return Common;
-        else if (a == b || b == c || a == c) return Isosceles;
-        else if (a + b + c == 12) return Egypt;
+        if (side1 == side2 && side2 == side3) return Common;
+        else if (side1 == side2 || side2 == side3 || side1 == side3) return Isosceles;
+        else if (side1 + side2 + side3 == 12) return Egypt;
         else return Versatile;
     }
-
     // Определение вида углов треугольника
     Forms FormAngles() {
+        // Переменная погрешности "eps", используется только для "range"
         float ang1, ang2, ang3, eps = 0.001;
-        Angle(ang1, ang2, ang3);
+        ang1 = AngleSide1(), ang2 = AngleSide2(), ang3 = AngleSide3();
 
         // Проверка на принадлежность числа диапазону
         auto range = [](float a, float b, float eps) {
@@ -128,41 +127,38 @@ public:
         else if (ang1 < 90 && ang2 < 90 && ang3 < 90) return Acute;
         else return Obtuse;
     }
-
-    // Вычисление высот в переменные
-    void Highs(float& a, float& b, float& c) {
-        a = 2 * Square() / side1, b = 2 * Square() / side2, c = 2 * Square() / side3;
+    // Вычисление высоты
+    float HighSide1() {
+        return 2 * Square() / side1;
     }
-
-    //Вычисление углов в переменные
-    void Angle(float& num1, float& num2, float& num3) {
-        float a, b, c;
-
-        // Вычисление угла
-        auto degree = [](float a, float b, float c) {
-            return acos((b * b + c * c - a * a) / (2 * b * c)) * 180 / M_PI;
-        };
-
-        Getter(a, b, c);
-        num1 = degree(a, b, c), num2 = degree(b, a, c), num3 = degree(c, a, b);
+    float HighSide2() {
+        return 2 * Square() / side2;
     }
-
+    float HighSide3() {
+        return 2 * Square() / side3;
+    }
+    //Вычисление угла
+    float AngleSide1() {
+        return acos((side2 * side2 + side3 * side3 - side1 * side1) / (2 * side2 * side3)) * 180 / M_PI;
+    }
+    float AngleSide2() {
+        return acos((side1 * side1 + side3 * side3 - side2 * side2) / (2 * side1 * side3)) * 180 / M_PI;
+    }
+    float AngleSide3() {
+        return acos((side2 * side2 + side2 * side2 - side3 * side3) / (2 * side2 * side1)) * 180 / M_PI;
+    }
     // Сравнение площади
     int CompareSquares(Triangle tr) {
-        int sign = 0;
-        if (this->Square() < tr.Square()) --sign;
-        else if (this->Square() > tr.Square()) ++sign;
-        return sign;
+        if (Square() < tr.Square()) return -1;
+        else if (Square() > tr.Square()) return 1;
+        return 0;
     }
-
     // Сравнение периметров
     int ComparePerimetrs(Triangle tr) {
-        int sign = 0;
-        if (this->Perimetr() < tr.Perimetr()) --sign;
-        else if (this->Perimetr() > tr.Perimetr()) ++sign;
-        return sign;
+        if (Perimetr() < tr.Perimetr()) return -1;
+        else if (Perimetr() > tr.Perimetr()) return 1;
+        return 0;
     }
-
     // Определение подобия
     bool Similarity(Triangle tr) {
         Triangle ltr = *this;
@@ -170,7 +166,6 @@ public:
         sort(vc1.begin(), vc1.end()), sort(vc2.begin(), vc2.end());
         return (vc1[0] / vc2[0] == vc1[1] / vc2[1] && vc1[1] / vc2[1] == vc1[2] / vc2[2]);
     }
-
 };
 
 void Triangle::Read() {
@@ -181,22 +176,22 @@ void Triangle::Read() {
         b = Check();
         c = Check();
     } while (!Exist(a,b,c));
-    Setter(a, b, c);
+    SetSide1(a), SetSide2(b), SetSide3(c);
 }
 
 void Triangle::Display() {
-    cout << "\nПервая сторона: " << this->side1;
-    cout << "\nВторая сторона: " << this->side2;
-    cout << "\nТретья сторона: " << this->side3;
+    cout << "\nПервая сторона: " << side1;
+    cout << "\nВторая сторона: " << side2;
+    cout << "\nТретья сторона: " << side3;
 
-    if (this->sideType == Versatile) cout << "\nРазносторонний ";
-    else if (this->sideType == Isosceles) cout << "\nРавнобедренный ";
-    else if (this->sideType == Common) cout << "\nРавносторонний ";
-    else if (this->sideType == Egypt) cout << "\nЕгипетский ";
+    if (sideType == Versatile) cout << "\nРазносторонний ";
+    else if (sideType == Isosceles) cout << "\nРавнобедренный ";
+    else if (sideType == Common) cout << "\nРавносторонний ";
+    else if (sideType == Egypt) cout << "\nЕгипетский ";
 
-    if (this->angleType == Rectengular) cout << "прямоугольный ";
-    else if (this->angleType == Acute) cout << "остроугольный ";
-    else if (this->angleType == Obtuse) cout << "тупоугольный ";
+    if (angleType == Rectengular) cout << "прямоугольный ";
+    else if (angleType == Acute) cout << "остроугольный ";
+    else if (angleType == Obtuse) cout << "тупоугольный ";
 
 }
 
@@ -205,79 +200,84 @@ void Tests(Triangle tr, Triangle rtr) {
     Triangle test_tr1(3, 4, 6), test_tr2;
 
     cout << "\n\nОбъекты\n\n"
-        << "----------------Работа с полями------------------\n\n"
-        << "Display()"; tr.Display();
+         << "----------------Работа с полями------------------\n\n"
+         << "Display()";
+    tr.Display();
 
-    cout << "\n\nSetter(13) и Getter(a,b,c)";
-    tr.Setter(13); tr.Getter(a, b, c);
-    assert(a == 13 && b == 13 && c == 13);
+    cout << "\n\nSetSide(13) и GetSide()";
+    tr.SetSide1(13), tr.SetSide2(13), tr.SetSide3(13);
+    a = tr.GetSide1(), b = tr.GetSide2(), c =  tr.GetSide3();
+    assert(a == 13); assert(b == 13); assert(c == 13);
 
-    cout << "\n\nRead() *с вложенной Setter(a,b,c)* и Getter(a,b,c)";
-    tr.Read(); tr.Getter(a, b, c);
-    assert(a != 13 && b != 13 && c != 13);
+    cout << "\n\nRead() *с вложенной SetSide()* и GetSide()";
+    tr.Read();
+    a = tr.GetSide1(), b = tr.GetSide2(),c =  tr.GetSide3();
+    assert(a != 13); assert(b != 13); assert(c != 13);
 
-    cout << "\nGetter(tr) для test_tr2() и Setter(rtr)";
-    test_tr2.Getter(tr); assert(test_tr2.Similarity(tr) == 1);
-    tr.Setter(rtr); assert(rtr.Similarity(tr) == 1);
+    cout << "\nSimilarity()";
+    test_tr2 = tr;
+    assert(test_tr2.Similarity(tr) == 1);
+    tr = rtr;
+    assert(rtr.Similarity(tr) == 1);
 
     cout << "\n\n----------------Рассчёты------------------\n\n"
          << "Perimetr() = " << tr.Perimetr()
-   << "\nSquare() = " << tr.Square()
-         << "\n\nHighs(): "; tr.Highs(a, b, c);
-    cout << a << " " << b << " " << c;
+         << "\nSquare() = " << tr.Square()
+         << "\n\nHighSide(): ";
+    cout << tr.HighSide1() << " " << tr.HighSide2() << " " << tr.HighSide3();
 
-    cout << "\nAngles(): "; tr.Angle(a, b, c);
-    cout << a << " " << b << " " << c;
+    cout << "\nAngleSide(): ";
+    cout << tr.AngleSide1() << " " << tr.AngleSide2() << " " << tr.AngleSide3();
 
     cout << "\n\n----------------Сравнение------------------\n\n"
-        << "tr.toString() (стороны): " << tr.toString()
-        << "\n\ntr.ComparePerimetrs(test_tr1(3,4,6))\ntest_tr1.Perimetr() = "
-        << test_tr1.Perimetr()
-        << "\ntr.Perimetr() = " << tr.Perimetr() << "\nresult = "
-        << tr.ComparePerimetrs(test_tr1);
+         << "tr.toString() (стороны): " << tr.toString()
+         << "\n\ntr.ComparePerimetrs(test_tr1(3,4,6))\ntest_tr1.Perimetr() = "
+         << test_tr1.Perimetr()
+         << "\ntr.Perimetr() = " << tr.Perimetr() << "\nresult = "
+         << tr.ComparePerimetrs(test_tr1);
 
-cout << "\n\nCompareSquares(test_tr1(3,4,6))\ntest_tr1.Square() = "
-        << test_tr1.Square()
-        << "\ntr.Square() = " << tr.Square() << "\nresult = "
-        << tr.CompareSquares(test_tr1);
+    cout << "\n\nCompareSquares(test_tr1(3,4,6))\ntest_tr1.Square() = "
+         << test_tr1.Square()
+         << "\ntr.Square() = " << tr.Square() << "\nresult = "
+         << tr.CompareSquares(test_tr1);
 
-cout << "\n\nSimilarity(test_tr1(3,4,6))\nresult = " << tr.Similarity(test_tr1)
-        << endl;
+    cout << "\n\nSimilarity(test_tr1(3,4,6))\nresult = " << tr.Similarity(test_tr1)
+         << endl;
 }
 
 void TestsMas(Triangle* trMas) {
     cout << "\n\nМассивы объектов\n\n"
-        << "----------------Сравнение------------------\n\n"
-        << "trMas[1].toString() (стороны): " << trMas[1].toString()
-  << "\n\ntrMas[1].ComparePerimetrs(trMas[0])\ntrMas[0].Perimetr() = "
-<< trMas[0].Perimetr()
-<< "\ntrMas[1].Perimetr() = " << trMas[1].Perimetr() << "\nresult = "
-<< trMas[1].ComparePerimetrs(trMas[0]);
+         << "----------------Сравнение------------------\n\n"
+         << "trMas[1].toString() (стороны): " << trMas[1].toString()
+         << "\n\ntrMas[1].ComparePerimetrs(trMas[0])\ntrMas[0].Perimetr() = "
+         << trMas[0].Perimetr()
+         << "\ntrMas[1].Perimetr() = " << trMas[1].Perimetr() << "\nresult = "
+         << trMas[1].ComparePerimetrs(trMas[0]);
 
     cout << "\n\nCompareSquares(trMas[0])\ntrMas[0].Square() = " << trMas[0].Square()
-  << "\ntrMas[1].Square() = " << trMas[1].Square() << "\nresult = "
-  << trMas[1].CompareSquares(trMas[0]);
+         << "\ntrMas[1].Square() = " << trMas[1].Square() << "\nresult = "
+         << trMas[1].CompareSquares(trMas[0]);
 
-cout << "\n\nSimilarity(trMas[0]))\nresult = " << trMas[1].Similarity(trMas[0])
-  << endl;
+    cout << "\n\nSimilarity(trMas[0]))\nresult = " << trMas[1].Similarity(trMas[0])
+         << endl;
 }
 
 void TestsDynamicMas(Triangle* trDynMas) {
     cout << "\n\nДинамические массивы объектов\n\n"
-        << "----------------Сравнение------------------\n\n"
-        << "trDynMas[1].toString() (стороны): " << trDynMas[1].toString()
-  << "\n\ntrDynMas[1].ComparePerimetrs(trDynMas[0])\ntrDynMas[0].Perimetr() = "
-  << trDynMas[0].Perimetr()
-        << "\ntrDynMas[1].Perimetr() = " << trDynMas[1].Perimetr() << "\nresult = "
-  << trDynMas[1].ComparePerimetrs(trDynMas[0]);
+         << "----------------Сравнение------------------\n\n"
+         << "trDynMas[1].toString() (стороны): " << trDynMas[1].toString()
+         << "\n\ntrDynMas[1].ComparePerimetrs(trDynMas[0])\ntrDynMas[0].Perimetr() = "
+         << trDynMas[0].Perimetr()
+         << "\ntrDynMas[1].Perimetr() = " << trDynMas[1].Perimetr() << "\nresult = "
+         << trDynMas[1].ComparePerimetrs(trDynMas[0]);
 
     cout << "\n\nCompareSquares(trDynMas[0])\ntrDynMas[0].Square() = "
-  << trDynMas[0].Square()
-        << "\ntrDynMas[1].Square() = " << trDynMas[1].Square() << "\nresult = "
-  << trDynMas[1].CompareSquares(trDynMas[0]);
+         << trDynMas[0].Square()
+         << "\ntrDynMas[1].Square() = " << trDynMas[1].Square() << "\nresult = "
+         << trDynMas[1].CompareSquares(trDynMas[0]);
 
     cout << "\n\nSimilarity(trDynMas[0]))\nresult = "
-  << trDynMas[1].Similarity(trDynMas[0]) << endl;
+         << trDynMas[1].Similarity(trDynMas[0]) << endl;
 }
 
 int main() {
@@ -316,18 +316,21 @@ int main() {
     */
 
     Triangle triangle1, triangle2,
-    trMas[2], *trDynMas = new Triangle[2];
+             trMas[2], *trDynMas = new Triangle[2];
 
     // Заполнение объектов
-    triangle1.Read(); triangle2.Read();
+    triangle1.Read();
+    triangle2.Read();
     // Заполнение массива объектов
-    trMas[0].Setter(triangle1); trMas[1].Setter(triangle2);
+    trMas[0] = triangle1;
+    trMas[1] = triangle2;
     // Заполнение динамического массива объектов
-    trDynMas[0].Setter(triangle1); trDynMas[1].Setter(triangle2);
+    trDynMas[0] = triangle1;
+    trDynMas[1] = triangle2;
 
     cout << "\nРазмеры\nОбъекта = " << sizeof(triangle1) << endl
-            << "Массива объектов = " << sizeof(trMas) << endl
-            << "Динамического массива объектов = " << sizeof(trDynMas) << endl;
+         << "Массива объектов = " << sizeof(trMas) << endl
+         << "Динамического массива объектов = " << sizeof(trDynMas) << endl;
 
     // Работа с треугольниками
     Tests(triangle1, triangle2);
