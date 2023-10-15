@@ -106,6 +106,7 @@ public:
     }
     // Определение вида сторон треугольника
     Forms FormSides() {
+        if (!Exist(side1, side2, side3)) return None;
         if (side1 == side2 && side2 == side3) return Common;
         else if (side1 == side2 || side2 == side3 || side1 == side3) return Isosceles;
         else if (side1 + side2 + side3 == 12) return Egypt;
@@ -121,7 +122,8 @@ public:
         auto range = [](float a, float b, float eps) {
             return (a <= b + eps && a >= b - eps);
         };
-
+        
+        if (!Exist(side1, side2, side3)) return None;
         if (range(ang1, 90, eps) || range(ang2, 90, eps) || range(ang3, 90, eps))
             return Rectengular;
         else if (ang1 < 90 && ang2 < 90 && ang3 < 90) return Acute;
