@@ -55,7 +55,7 @@ private:
 		string waste;
 		float data;
 		while (!(cin >> data)) {
-			cin.clear(); getline(cin, waste);
+			cin.clear(), cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << warnings[0];
 		}
 		return data;
