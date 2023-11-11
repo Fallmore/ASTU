@@ -25,7 +25,7 @@ Long& Long::operator+=(const long& val) {
     if (val >= 0) {
         if (overflowMinorSum(temp)) {
             if (overflowMajorSum()) throw overflow_error(errors[0]);
-            // Íàõîäèì minor ñ ó÷¸òîì ïåðåïîëíåíèÿ
+            // Находим minor с учётом переполнения
             temp -= maxui - minor, minor = temp, ++major;
         } else minor += temp;
     } else *this -= abs(val);
@@ -37,7 +37,7 @@ Long& Long::operator-=(const long& val) {
     if (val >= 0) {
         if (temp > minor) {
             if (major == 0) throw underflow_error(errors[2]);
-            // Íàõîäèì minor ñ ó÷¸òîì íèæíåãî ïåðåïîëíåíèÿ
+            // Находим minor с учётом нижнего переполнения
             minor = maxui - (temp - minor), --major;
         } else minor -= temp;
     } else *this += abs(val);
@@ -54,17 +54,17 @@ Long& Long::operator/=(const long& val) {
     if (val == 0) throw underflow_error(errors[1]);
     if (val < 0) throw underflow_error(errors[3]);
     uint temp = static_cast<uint>(val);
-    // Íàõîäèì îñòàòîê îò äåëåíèÿ major
+    // Находим остаток от деления major
     double rest = static_cast<double>(major) / temp - (major / temp);
     double r = fmod(static_cast<double>(minor), temp);
-    // Äåëèì íàöåëî.
+    // Делим нацело.
     if (major != 0 && fmod(static_cast<double>(minor), temp) != static_cast<double>(temp) / 2)
-        // Â minor èñïîëüçóåì îêðóãëåíèå ââåðõ, èçáàâëÿÿñü îò íåòî÷íîñòè +-1
+        // В minor используем округление вверх, избавляясь от неточности +-1
         minor = static_cast<uint>(ceil(static_cast<double>(minor) / temp));
     else minor /= temp;
     major /= temp;
-    // Ïðèáàâëÿåì îñòàòîê ê minor
-    // Åñëè rest áóäåò áîëüøå 0.5, òî ó long áóäåò ïåðåïîëíåíèå
+    // Прибавляем остаток к minor
+    // Если rest будет больше 0.5, то у long будет переполнение
     if (rest > 0.5) rest -= 0.5, * this += static_cast<long>(rest * maxui);
     // rest <= 0.5
     *this += static_cast<long>(rest * maxui);
@@ -72,9 +72,9 @@ Long& Long::operator/=(const long& val) {
 }
 Long& Long::operator%=(const long& val) {
     Long templong = *this;
-    // Äåëèì íàöåëî, çàòåì óìíîæàåì îáðàòíî
+    // Делим нацело, затем умножаем обратно
     templong /= val, templong *= val;
-    // Íàõîäèì ðàçíèöåé îñòàòîê
+    // Находим разницей остаток
     *this -= templong;
     return *this;
 }
@@ -97,7 +97,7 @@ Long& Long::operator+=(const Long& rlng) {
     uint temp = static_cast<uint>(rlng.minor);
     if (overflowMinorSum(temp)) {
         if (overflowMajorSum()) throw overflow_error(errors[0]);
-        // Íàõîäèì minor ñ ó÷¸òîì ïåðåïîëíåíèÿ
+        // Находим minor с учётом переполнения
         temp -= maxui - minor, minor = temp, ++major;
     } else minor += temp;
     return *this;
@@ -108,7 +108,7 @@ Long& Long::operator-=(const Long& rlng) {
     uint temp = static_cast<uint>(rlng.minor);
     if (temp > minor) {
         if (major == 0) throw underflow_error(errors[2]);
-        // Íàõîäèì minor ñ ó÷¸òîì íèæíåãî ïåðåïîëíåíèÿ
+        // Находим minor с учётом нижнего переполнения
         minor = maxui - (temp - minor), --major;
     } else minor -= temp;
     return *this;
@@ -123,8 +123,8 @@ Long& Long::operator/=(const Long& rlng) {
     ull dividend = static_cast<ull>(major) * maxui + minor;
     ull divider = static_cast<ull>(rlng.major) * maxui + rlng.minor;
     *this = 0;
-    // Ò.ê. 2^64 / 2^32 = 2^32, òî long íå ïîäõîäèò äèàïàçîíó (2^16;2^32]
-    // È ïðèíÿòî çàäåéñòâîâàòü ìåòîä AddULL, âêëþ÷àÿ âî âíèìàíèå ñëó÷àé 2^64 / [1;2^32)
+    // Т.к. 2^64 / 2^32 = 2^32, то long не подходит диапазону (2^16;2^32]
+    // И принято задействовать метод AddULL, включая во внимание случай 2^64 / [1;2^32)
     return AddULL(dividend / divider);
 }
 Long& Long::operator%=(const Long& rlng) {
@@ -267,7 +267,7 @@ void Tests() {
         assert(d == b);
         Long e("234234234234234");
         Long f("234234234234230");
-        // Çíàêè ñðàâíåíèÿ
+        // Знаки сравнения
         assert(e < f == false);
         assert(e > f == true);
         assert(e <= f == false);
@@ -285,25 +285,25 @@ void Tests() {
         assert(1 >= c == true);
         assert(1 <= c == false);
         assert(1 != c == true);
-        // Àðèôìåòè÷åñêèå îïåðàöèè. Ñëåâà Long
+        // Арифметические операции. Слева Long
         assert(e == f + 4);
         assert(e - 4 == f);
         assert(e * 2 == f * 2 + 8);
         assert(e / 2 == f / 2 + 2);
         assert((e + 1) % 2 == 1);
-        // Àðèôìåòè÷åñêèå îïåðàöèè. Ñïðàâà Long
+        // Арифметические операции. Справа Long
         assert(e == 4 + f);
         assert(0 == 32313213 - a);
         assert(2 * a == 64626426);
         assert(64626426 / a == 2);
         assert(14 % a == 14);
-        // Àðèôìåòè÷åñêèå îïåðàöèè. Îáà Long
+        // Арифметические операции. Оба Long
         assert(a + a == 64626426);
         assert(0 == a - a);
         assert(a * c == 0);
         assert(a / a == 1);
         assert(a % a == 0);
-        // Àðèôìåòè÷åñêèå îïåðàöèè. C ïðèñâàèâàíèåì
+        // Арифметические операции. C присваиванием
         c += f; assert(c == f);
         c += 4; assert(c == e);
         c -= 4; assert(c == f);
@@ -318,7 +318,7 @@ void Tests() {
         c++; assert(c == 3);
         --c; assert(c == 2);
         c--; assert(c == 1);
-        cout << "Òåñò ïðîéäåí!\n";
+        cout << "Тест пройден!\n";
     } catch (const exception& e) {
         cerr << e.what();
     }
@@ -326,7 +326,7 @@ void Tests() {
 
 int main() {
     setlocale(LC_ALL, "RUS");
-    cout << "Ñàìîäóðîâ ÄÈÍÐÁ-21/2\nÂàðèàíò 13\n\n\n";
+    cout << "Самодуров ДИНРБ-21/2\nВариант 13\n\n\n";
     Tests();
     Long a = 32313213;
     Long b = 2343242;
