@@ -57,7 +57,7 @@ Long& Long::operator/=(const long& val) {
     // Находим остаток от деления major
     double rest = static_cast<double>(major) / temp - (major / temp);
     double r = fmod(static_cast<double>(minor), temp);
-    // Делим нацело.
+    // Делим нацело. If сработает, когда нет major и остаток не равен половине делителя
     if (major != 0 && fmod(static_cast<double>(minor), temp) != static_cast<double>(temp) / 2)
         // В minor используем округление вверх, избавляясь от неточности +-1
         minor = static_cast<uint>(ceil(static_cast<double>(minor) / temp));
