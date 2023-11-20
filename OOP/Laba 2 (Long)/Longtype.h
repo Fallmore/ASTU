@@ -56,15 +56,16 @@ private:
 		minor = temp;
 		return *this;
 	}
+
 public:
-	Long() : major(0), minor(0) {};
-	Long(const string& val) { AddULL(stoull(val)); };
-	Long(const long& val) { *this = val; };
+	Long() noexcept;
+	Long(const string& val) noexcept;
+	Long(const long& val) noexcept;
+
+	uint GetMajor() const noexcept;
+	uint GetMinor() const noexcept;
 
 	string toString() const noexcept;
-
-	uint GetMajor() const noexcept { return major; }
-	uint GetMinor() const noexcept { return minor; }
 
 	friend ostream& operator<<(ostream& c, const Long& major) noexcept;
 	friend istream& operator>>(istream& c, Long& lng);
@@ -86,7 +87,6 @@ public:
 	Long& operator/=(const Long& rlng);
 	Long& operator%=(const Long& rlng);
 
-	Long operator=(const Long& rlng);
 	Long operator+(const Long& rlng) const;
 	Long operator-(const Long& rlng) const;
 	Long operator*(const Long& rlng) const;
@@ -100,4 +100,28 @@ public:
 	bool operator<=(const Long& rlng) const noexcept;
 	bool operator!=(const Long& rlng) const noexcept;
 };
+Long operator+(const long& val, const Long& lng);
+Long operator-(const long& val, const Long& lng);
+Long operator*(const long& val, const Long& lng);
+Long operator/(const long& val, const Long& lng);
+Long operator%(const long& val, const Long& lng);
+Long operator+(const Long& lng, const long& val);
+Long operator-(const Long& lng, const long& val);
+Long operator*(const Long& lng, const long& val);
+Long operator/(const Long& lng, const long& val);
+Long operator%(const Long& lng, const long& val);
+
+bool operator>(const Long& lng, const long& val) noexcept;
+bool operator<(const Long& lng, const long& val) noexcept;
+bool operator==(const Long& lng, const long& val) noexcept;
+bool operator>=(const Long& lng, const long& val) noexcept;
+bool operator<=(const Long& lng, const long& val) noexcept;
+bool operator!=(const Long& lng, const long& val) noexcept ;
+bool operator>(const long& val, const Long& lng) noexcept;
+bool operator<(const long& val, const Long& lng) noexcept;
+bool operator==(const long& val, const Long& lng) noexcept;
+bool operator>=(const long& val, const Long& lng) noexcept;
+bool operator<=(const long& val, const Long& lng) noexcept;
+bool operator!=(const long& val, const Long& lng) noexcept;
+
 #endif // header guard
