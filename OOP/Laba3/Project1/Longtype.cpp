@@ -33,7 +33,7 @@ Long& Long::operator+=(const long& val) {
     if (val >= 0) {
         if (overflowMinorSum(temp)) {
             if (overflowMajorSum()) throw overflow_error(errors[0]);
-            // Находим minor с учётом переполнения
+            // РќР°С…РѕРґРёРј minor СЃ СѓС‡С‘С‚РѕРј РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
             temp -= maxui - minor, minor = temp, ++major;
         } else minor += temp;
     } else *this -= abs(val);
@@ -45,7 +45,7 @@ Long& Long::operator-=(const long& val) {
     if (val >= 0) {
         if (temp > minor) {
             if (major == 0) throw underflow_error(errors[2]);
-            // Находим minor с учётом нижнего переполнения
+            // РќР°С…РѕРґРёРј minor СЃ СѓС‡С‘С‚РѕРј РЅРёР¶РЅРµРіРѕ РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
             minor = maxui - (temp - minor), --major;
         } else minor -= temp;
     } else *this += abs(val);
@@ -62,17 +62,17 @@ Long& Long::operator/=(const long& val) {
     if (val == 0) throw underflow_error(errors[1]);
     if (val < 0) throw underflow_error(errors[3]);
     uint temp = static_cast<uint>(val);
-    // Находим остаток от деления major
+    // РќР°С…РѕРґРёРј РѕСЃС‚Р°С‚РѕРє РѕС‚ РґРµР»РµРЅРёСЏ major
     double rest = static_cast<double>(major) / temp - (major / temp);
     double r = fmod(static_cast<double>(minor), temp);
-    // Делим нацело. If сработает, когда нет major и остаток не равен половине делителя
+    // Р”РµР»РёРј РЅР°С†РµР»Рѕ. If СЃСЂР°Р±РѕС‚Р°РµС‚, РєРѕРіРґР° РЅРµС‚ major Рё РѕСЃС‚Р°С‚РѕРє РЅРµ СЂР°РІРµРЅ РїРѕР»РѕРІРёРЅРµ РґРµР»РёС‚РµР»СЏ
     if (major != 0 && fmod(static_cast<double>(minor), temp) != static_cast<double>(temp) / 2)
-        // В minor используем округление вверх, избавляясь от неточности +-1
+        // Р’ minor РёСЃРїРѕР»СЊР·СѓРµРј РѕРєСЂСѓРіР»РµРЅРёРµ РІРІРµСЂС…, РёР·Р±Р°РІР»СЏСЏСЃСЊ РѕС‚ РЅРµС‚РѕС‡РЅРѕСЃС‚Рё +-1
         minor = static_cast<uint>(ceil(static_cast<double>(minor) / temp));
     else minor /= temp;
     major /= temp;
-    // Прибавляем остаток к minor
-    // Если rest будет больше 0.5, то у long будет переполнение
+    // РџСЂРёР±Р°РІР»СЏРµРј РѕСЃС‚Р°С‚РѕРє Рє minor
+    // Р•СЃР»Рё rest Р±СѓРґРµС‚ Р±РѕР»СЊС€Рµ 0.5, С‚Рѕ Сѓ long Р±СѓРґРµС‚ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ
     if (rest > 0.5) rest -= 0.5, * this += static_cast<long>(rest * maxui);
     // rest <= 0.5
     *this += static_cast<long>(rest * maxui);
@@ -80,9 +80,9 @@ Long& Long::operator/=(const long& val) {
 }
 Long& Long::operator%=(const long& val) {
     Long templong = *this;
-    // Делим нацело, затем умножаем обратно
+    // Р”РµР»РёРј РЅР°С†РµР»Рѕ, Р·Р°С‚РµРј СѓРјРЅРѕР¶Р°РµРј РѕР±СЂР°С‚РЅРѕ
     templong /= val, templong *= val;
-    // Находим разницей остаток
+    // РќР°С…РѕРґРёРј СЂР°Р·РЅРёС†РµР№ РѕСЃС‚Р°С‚РѕРє
     *this -= templong;
     return *this;
 }
@@ -105,7 +105,7 @@ Long& Long::operator+=(const Long& rlng) {
     uint temp = static_cast<uint>(rlng.minor);
     if (overflowMinorSum(temp)) {
         if (overflowMajorSum()) throw overflow_error(errors[0]);
-        // Находим minor с учётом переполнения
+        // РќР°С…РѕРґРёРј minor СЃ СѓС‡С‘С‚РѕРј РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
         temp -= maxui - minor, minor = temp, ++major;
     } else minor += temp;
     return *this;
@@ -116,7 +116,7 @@ Long& Long::operator-=(const Long& rlng) {
     uint temp = static_cast<uint>(rlng.minor);
     if (temp > minor) {
         if (major == 0) throw underflow_error(errors[2]);
-        // Находим minor с учётом нижнего переполнения
+        // РќР°С…РѕРґРёРј minor СЃ СѓС‡С‘С‚РѕРј РЅРёР¶РЅРµРіРѕ РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
         minor = maxui - (temp - minor), --major;
     } else minor -= temp;
     return *this;
@@ -131,8 +131,8 @@ Long& Long::operator/=(const Long& rlng) {
     ull dividend = static_cast<ull>(major) * maxui + minor;
     ull divider = static_cast<ull>(rlng.major) * maxui + rlng.minor;
     *this = 0;
-    // Т.к. 2^64 / 2^32 = 2^32, то long не подходит диапазону (2^16;2^32]
-    // И принято задействовать метод AddULL, включая во внимание случай 2^64 / [1;2^32)
+    // Рў.Рє. 2^64 / 2^32 = 2^32, С‚Рѕ long РЅРµ РїРѕРґС…РѕРґРёС‚ РґРёР°РїР°Р·РѕРЅСѓ (2^16;2^32]
+    // Р РїСЂРёРЅСЏС‚Рѕ Р·Р°РґРµР№СЃС‚РІРѕРІР°С‚СЊ РјРµС‚РѕРґ AddULL, РІРєР»СЋС‡Р°СЏ РІРѕ РІРЅРёРјР°РЅРёРµ СЃР»СѓС‡Р°Р№ 2^64 / [1;2^32)
     return AddULL(dividend / divider);
 }
 Long& Long::operator%=(const Long& rlng) {
