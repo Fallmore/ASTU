@@ -5,39 +5,39 @@
 #include <string>
 #include <typeinfo>
 
-//Áðþñ Ýêêåëü
+//Брюс Эккель
 
-// -- ïðîâåðÿþùèé ìàêðîñ -- ñìîòðè ìåòîä dotest() --
+// -- проверяющий макрос -- смотри метод dotest() --
 #define check(cond) dotest(cond, #cond, __FILE__, __LINE__)
-// -- ìàêðîñ - âûâîä ñîîáùåíèÿ îá îøèáêå --
-// -- èìåííî ïîýòîìó dofail() ñäåëàíà îòäåëüíî --
+// -- макрос - вывод сообщения об ошибке --
+// -- именно поэтому dofail() сделана отдельно --
 #define error(str) dofail(str, __FILE__, __LINE__)
 
-namespace UnitTest {		// -- òåñòîâîå ïðîñòðàíñòâî èìåí -–
+namespace UnitTest {		// -- тестовое пространство имен -–
 using std::cout;
 using std::endl;
 using std::string;
-// -- áàçîâûé àáñòðàêòíûé òåñòîâûé êëàññ --
+// -- базовый абстрактный тестовый класс --
 class Test {
-    size_t nPass = 0;            // -- êîëè÷åñòâî ïðîéäåííûõ òåñòîâ --
-    size_t nFail = 0;            // -- êîëè÷åñòâî ïðîâàëåííûõ òåñòîâ --
-    // -- ýòè êîíñòðóêòîðû-ïðèñâàèâàíèÿ ñîçäàâàòü íå íàäî --
+    size_t nPass = 0;            // -- количество пройденных тестов --
+    size_t nFail = 0;            // -- количество проваленных тестов --
+    // -- эти конструкторы-присваивания создавать не надо --
     Test(const Test &)  = delete;
     Test(const Test &&) = delete;
     Test& operator=(const Test &)  = delete;
     Test& operator=(const Test &&) = delete;
-    // -- âûðåçàåì ÷èñòîå èìÿ òèïà èç  typeid().name() – îñîáåííîñòü g++ ??? --
+    // -- вырезаем чистое имя типа из  typeid().name() – особенность g++ ??? --
     string getTypeName(const string &t) const {
         size_t k = 0;
-        stoi(t, &k);            // -- ðåçóëüòàò íå íóæåí - íóæåí èíäåêñ k --
-        string s = t.substr(k); // -- îòðåçàåì íà÷àëüíóþ äëèíó --
+        stoi(t, &k);            // -- результат не нужен - нужен индекс k --
+        string s = t.substr(k); // -- отрезаем начальную длину --
         return s;
     }
   public:
-    Test(): nPass(0), nFail(0) {} // -- òðèâèàëüíûé êîíñòðóêòîð --
-    virtual void run() = 0;       // -- îïðåäåëÿåòñÿ â êëàññàõ-íàñëåäíèêàõ îò òåñòà --
-    void report() const {         // -- âûâîä ðåçóëüòàòîâ òåñòèðîâàíèÿ --
-        string name = typeid(*this).name();		// -- èìÿ êëàññà --
+    Test(): nPass(0), nFail(0) {} // -- тривиальный конструктор --
+    virtual void run() = 0;       // -- определяется в классах-наследниках от теста --
+    void report() const {         // -- вывод результатов тестирования --
+        string name = typeid(*this).name();		// -- имя класса --
         cout << "-----\n";
         cout  << "Testing <" << getTypeName(name) << ">\n"
               << "All tests    = " << (nPass + nFail) << ";\n"
@@ -46,26 +46,26 @@ class Test {
               << "-----\n";
     }
     void reset() {
-        nPass = nFail = 0;    // äëÿ áóäóùèõ ðàñèðåíèé --
+        nPass = nFail = 0;    // для будущих расирений --
     }
     void success() {
-        ++nPass;    // -- òîëüêî ðàäè èñêëþ÷åíèé –
+        ++nPass;    // -- только ради исключений –
     }
     void fail()   {
-        ++nFail;    // -- òîëüêî ðàäè èñêëþ÷åíèé –
+        ++nFail;    // -- только ради исключений –
     }
-  protected:		// -- íàñëåäóåìûå çàùèùåííûå ìåòîäû
-    // -- ïàðàìåòð cond - ýòî è åñòü ïðîâåðêà --
+  protected:		// -- наследуемые защищенные методы
+    // -- параметр cond - это и есть проверка --
     void dotest(bool cond, const string &message, const char *filename, long nline) {
-        if(cond) ++nPass;         // -- òåñò ïðîøåë --
-        else {                    // -- òåñò ÍÅ ïðîøåë --
+        if(cond) ++nPass;         // -- тест прошел --
+        else {                    // -- тест НЕ прошел --
             ++nFail;
-            dofail(message, filename, nline);	// -- óñëîâèå, ôàéë è ñòðîêà ôàéëà
+            dofail(message, filename, nline);	// -- условие, файл и строка файла
         }
     }
-    // -- âûâîä ïðîâàëüíîãî òåñòà --
+    // -- вывод провального теста --
     void dofail(const string &message, const char *filename, long nline) {
-        // -- âûðåçàåì èìÿ ôàéëà èç ïîëíîãî èìåíè filename --
+        // -- вырезаем имя файла из полного имени filename --
         auto f = [](const string &name)-> string {
             auto idx = name.rfind("\\");
             return name.substr(idx + 1);
