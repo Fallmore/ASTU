@@ -20,14 +20,14 @@ class Long
 private:
 	uint major = 0, minor = 0;
 
-	// Ïðîâåðêà íà ïåðåïîëíåíèå ìëàäøåãî ðàçðÿäà
+	// Проверка на переполнение младшего разряда
 	bool overflowMinorSum(const long& val) const noexcept {
 		return (minor > maxui - val);
 	}
 	bool overflowMinorMul(const long& val) const noexcept {
 		return (minor > maxui / val);
 	}
-	// Ïðîâåðêà íà ïåðåïîëíåíèå ñòàðøåãî ðàçðÿäà
+	// Проверка на переполнение старшего разряда
 	bool overflowMajorSum(const long& val = 1) const noexcept {
 		return (major > maxui - val);
 	}
@@ -35,22 +35,22 @@ private:
 		return (major > maxui / val);
 	}
 	string errors[4]{
-		"Îøèáêà: Âûçâàíî âåðõíåå ïåðåïîëíåíèå!",
-		"Îøèáêà: Äåëåíèå íà íîëü!",
-		"Îøèáêà: Âûçâàíî íèæíåå ïåðåïîëíåíèå!",
-		"Îøèáêà: Äåëåíèå íà îòðèöàòåëüíîå ÷èñëî!"
+		"Ошибка: Вызвано верхнее переполнение!",
+		"Ошибка: Деление на ноль!",
+		"Ошибка: Вызвано нижнее переполнение!",
+		"Ошибка: Деление на отрицательное число!"
 	};
-	// Äîáàâëÿåò ÷èñëî ïðåäïîëîæèòåëüíî áîëüøå unsigned int
+	// Добавляет число предположительно больше unsigned int
 	Long& AddULL(const ull& val)
 	{
 		uint temp = static_cast<uint>(val);
 		if (val > maxui) {
-			// Èùåì êîëè÷åñòâî ïåðåïîëíåíèé
+			// Ищем количество переполнений
 			ull count = val / maxui;
 			if (major > maxui - val) throw overflow_error(errors[0]);
-			// Äîáàâëÿåì êîëè÷åñòâî ïåðåïîëíåíèé â ñòàðøèé ðàçðÿä
+			// Добавляем количество переполнений в старший разряд
 			major += static_cast<uint>(count);
-			// Íàõîäèì îñòàòîê îò äåëåíèÿ
+			// Находим остаток от деления
 			temp = static_cast<uint>(val % maxui);
 		}
 		minor = temp;
