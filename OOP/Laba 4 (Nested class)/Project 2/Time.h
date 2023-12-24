@@ -63,30 +63,6 @@ class Time {
         bool operator>=(const Modulo& rmdl) const noexcept;
         bool operator<=(const Modulo& rmdl) const noexcept;
         bool operator!=(const Modulo& rmdl) const noexcept;
-
-        friend Modulo operator+(const int& val, const Modulo & mdl);
-        friend Modulo operator-(const int& val, const Modulo & mdl);
-        friend Modulo operator*(const int& val, const Modulo & mdl);
-        friend Modulo operator/(const int& val, const Modulo & mdl);
-        friend Modulo operator%(const int& val, const Modulo & mdl);
-        friend Modulo operator+(const Modulo & mdl, const int& val);
-        friend Modulo operator-(const Modulo & mdl, const int& val);
-        friend Modulo operator*(const Modulo & mdl, const int& val);
-        friend Modulo operator/(const Modulo & mdl, const int& val);
-        friend Modulo operator%(const Modulo & mdl, const int& val);
-
-        friend bool operator>(const Modulo & mdl, const int& val) noexcept;
-        friend bool operator<(const Modulo & mdl, const int& val) noexcept;
-        friend bool operator==(const Modulo & mdl, const int& val) noexcept;
-        friend bool operator>=(const Modulo & mdl, const int& val) noexcept;
-        friend bool operator<=(const Modulo & mdl, const int& val) noexcept;
-        friend bool operator!=(const Modulo & mdl, const int& val) noexcept ;
-        friend bool operator>(const int& val, const Modulo & mdl) noexcept;
-        friend bool operator<(const int& val, const Modulo & mdl) noexcept;
-        friend bool operator==(const int& val, const Modulo & mdl) noexcept;
-        friend bool operator>=(const int& val, const Modulo & mdl) noexcept;
-        friend bool operator<=(const int& val, const Modulo & mdl) noexcept;
-        friend bool operator!=(const int& val, const Modulo & mdl) noexcept;
     };
 
     Modulo hour, minute, second;
